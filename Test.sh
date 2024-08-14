@@ -71,7 +71,7 @@ EOF
 
     IFS=',' read -ra PORT_ARRAY <<< "$target_ports"
     for port in "${PORT_ARRAY[@]}"; do
-        zmap -p "$port" -B 300M -T 1 -o - --source-ip=0.0.0.0 | grep -v -f $blacklist_file | while read -r zmap_ip; do
+        zmap -p "$port" -B 100M -T 5 -o - --source-ip=0.0.0.0 | grep -v -f $blacklist_file | while read -r zmap_ip; do
             echo "Processing IP: $zmap_ip"  # 添加输出Debug log
             (
                 if curl --max-time 1 http://"$zmap_ip":"$port" >/dev/null 2>&1; then
@@ -93,7 +93,7 @@ EOF
 elif [ "$scan_mode" == "2" ]; then
     IFS=',' read -ra PORT_ARRAY <<< "$target_ports"
     for port in "${PORT_ARRAY[@]}"; do
-        zmap -p "$port" -B 20M -T 6 -o - | grep -v -f $blacklist_file | while read -r zmap_ip; do
+        zmap -p "$port" -B 200M -T 2 -o - | grep -v -f $blacklist_file | while read -r zmap_ip; do
             echo "Processing IP: $zmap_ip"  # 添加输出Debug log
             (
                 if curl --max-time 1 http://"$zmap_ip":"$port" >/dev/null 2>&1; then
